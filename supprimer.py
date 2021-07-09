@@ -59,19 +59,19 @@ def remove_country():
 
 def liste_menu ():
     menu.destroy()
-    os.system("python ./pages/liste.py")
+    os.system("python ./liste.py")
 
 def ajouter_menu ():
     menu.destroy()
-    os.system("python ./pages/ajouter.py")
+    os.system("python ./ajouter.py")
 
 def modifier_menu ():
     menu.destroy()
-    os.system("python ./pages/modifier.py")
+    os.system("python ./modifier.py")
 
 def supprimer_menu ():
     menu.destroy()
-    os.system("python ./pages/supprimer.py")
+    os.system("python ./supprimer.py")
 
 def back_to_menu ():
     menu.destroy()

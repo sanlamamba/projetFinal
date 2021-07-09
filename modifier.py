@@ -22,7 +22,64 @@ main_bg = "#efefff";
 main_fg = "#fafafa"
 widget_bg = "#303030"
 #FUNTIONS
-def add_country():
+def rechercher_pays():
+    global data
+    if(code_txt.get() == ""):
+        info_label['text']="Erreur : Veuillez remplir les champs correctement"
+        return 0
+
+  
+    code = int(code_txt.get())
+    if str(code) in data:
+        code_entry.configure(state="disabled")
+        recherche_btn.configure(state="disabled")
+        print(data[str(code)]["nom"])
+
+        
+
+        name_entry.configure(state="normal")
+        capital_entry.configure(state="normal")
+        population_entry.configure(state="normal")
+        langue_entry.configure(state="normal")
+        superficie_entry.configure(state="normal")
+        mois_entry.configure(state="normal")
+        jour_entry.configure(state="normal")
+        annee_entry.configure(state="normal")
+        president_entry.configure(state="normal")
+        pib_entry.configure(state="normal")
+        refresh_btn.configure(state="normal")
+        valider_btn.configure(state="normal")
+
+        name_entry.delete(0,END)
+        name_entry.insert(END,str(data[str(code)]["nom"]))
+        capital_entry.delete(0,END)
+        capital_entry.insert(END,str(data[str(code)]["capital"]))
+        population_entry.delete(0,END)
+        population_entry.insert(END,str(data[str(code)]["population"]))
+        langue_entry.delete(0,END)
+        langue_entry.insert(END,str(data[str(code)]["langue"]))
+        superficie_entry.delete(0,END)
+        superficie_entry.insert(END,str(data[str(code)]["superficie"]))
+        president_entry.delete(0,END)
+        president_entry.insert(END,str(data[str(code)]["president"]))
+        pib_entry.delete(0,END)
+        pib_entry.insert(END,str(data[str(code)]["pib"]))
+
+        date = str(data[str(code)]["independance"]).split(sep="-")
+        jour_entry.delete(0,END)
+        jour_entry.insert(END,date[0])
+        mois_entry.delete(0,END)
+        mois_entry.insert(END,date[1])
+        annee_entry.delete(0,END)
+        annee_entry.insert(END,date[2])
+
+        info_label['text']="Modifier les informations, puis  appuyer Valider"
+
+    else:
+        info_label['text']="Erreur : Cet code n'existe pas"
+        return 0
+
+def modifier_country():
     global data
     # print(data)
     try:
@@ -39,66 +96,63 @@ def add_country():
 
     code = int(code_txt.get())
     print(code)
-    if str(code) in data:
-        info_label['text']="Erreur : Code existe deja"
+    if str(code) not in data:
+        info_label['text']="Erreur : Code n'existe pas"
         return "Erreur 807"
+    else:
 
-    if((code not in range(100,500))):
-        info_label['text']="Erreur : Code doit etre compris entre 100 et 500"
-        return "Erreur 808"
+        nom = name_txt.get()
+        capital = capital_txt.get()
+        population = int(population_txt.get())
+        langue = langue_txt.get()
+        superficie = int(superficie_txt.get())
+        
+        annee = int(annee_txt.get())
+        jour = int(jour_txt.get())
+        mois = int(mois_txt.get())
+        if((annee not in range(1800,2021)) or(jour not in range(0,31)) or(mois not in range(1,13))):
+            info_label['text']="Erreur la date doit etre sous la forme AAAA -- JJ -- MM"
+            return "Erreur la date"
+        president= president_txt.get()
+        pib = int(pib_txt.get())
+        
+        if((nom == "") or (capital == "") or (langue == "") or (president == "")):
+            info_label['text']="Erreur : Veuillez remplir les champs correctement"
+            return "Veuillez remplir les champs"
 
-    nom = name_txt.get()
-    capital = capital_txt.get()
-    population = int(population_txt.get())
-    langue = langue_txt.get()
-    superficie = int(superficie_txt.get())
-    
-    annee = int(annee_txt.get())
-    jour = int(jour_txt.get())
-    mois = int(mois_txt.get())
-    if((annee not in range(1800,2021)) or(jour not in range(0,31)) or(mois not in range(1,13))):
-        info_label['text']="Erreur Date"
-        return "Erreur Date"
-    president= president_txt.get()
-    pib = int(pib_txt.get())
-    
-    if((nom == "") or (capital == "") or (langue == "") or (president == "")):
-        info_label['text']="Erreur : Veuillez remplir les champs correctement"
-        return "Veuillez remplir les champs"
-
-    data[code] = {
-        "nom":nom,
-        "capital":capital,
-        "population":population,
-        "langue":langue,
-        "superficie":superficie,
-        "independance":str(jour)+"-"+str(mois)+"-"+str(annee),
-        "president":president,
-        "pib":pib
-    }
-    out_file = open("./config/assets/data.json",'w');
-    json.dump(data,out_file,indent=5)
-    out_file.close()
-    info_label['text']="Ajout de " +str(code)+" reussie"
-    data=json.load(open("./config/assets/data.json"))
-    return "success"
+        data[str(code)] = {
+            "nom":nom,
+            "capital":capital,
+            "population":population,
+            "langue":langue,
+            "superficie":superficie,
+            "independance":str(jour)+"-"+str(mois)+"-"+str(annee),
+            "president":president,
+            "pib":pib
+        }
+        out_file = open("./config/assets/data.json",'w');
+        json.dump(data,out_file,indent=5)
+        out_file.close()
+        info_label['text']="Modification de " +str(code)+" reussie"
+        data=json.load(open("./config/assets/data.json"))
+        return "success"
 
 
 def liste_menu ():
     menu.destroy()
-    os.system("python ./pages/liste.py")
+    os.system("python ./liste.py")
 
 def ajouter_menu ():
     menu.destroy()
-    os.system("python ./pages/ajouter.py")
+    os.system("python ./ajouter.py")
 
 def modifier_menu ():
     menu.destroy()
-    os.system("python ./pages/modifier.py")
+    os.system("python ./modifier.py")
 
 def supprimer_menu ():
     menu.destroy()
-    os.system("python ./pages/supprimer.py")
+    os.system("python ./supprimer.py")
 
 def back_to_menu ():
     menu.destroy()
@@ -172,6 +226,16 @@ code_label = Label(entry_wrapper, text="Code du pays", padx=5,font=main_font)
 code_entry = Entry(entry_wrapper,textvariable=code_txt,width=40)
 code_label.grid(row=0,column=0,pady=10,padx=10)
 code_entry.grid(row=0,column=1,pady=10,padx=10,ipadx=20,ipady=5)
+recherche_btn = Button(entry_wrapper, text="Rechercher",
+                            # width = "30",
+                            # pady="10",
+                            activebackground="black",
+                            activeforeground = "white",
+                            background = widget_bg,
+                            font = main_font,
+                            fg = main_fg,
+                            command = rechercher_pays)
+recherche_btn.grid(row=0,column=2,pady=10,padx=10,ipadx=20,ipady=5)
 
 date_wrapper = LabelFrame(entry_wrapper, text="Date d'independance", height=300)
 date_wrapper.grid(row=5,column=0,columnspan=4,padx=5,pady=5)
@@ -194,11 +258,23 @@ mois_entry = Entry(date_wrapper,textvariable=mois_txt,width=15)
 mois_label.grid(row=0,column=4,pady=10,padx=10)
 mois_entry.grid(row=0,column=5,pady=10,padx=10,ipadx=20,ipady=5)
 
+name_entry.configure(state="disabled")
+capital_entry.configure(state="disabled")
+population_entry.configure(state="disabled")
+langue_entry.configure(state="disabled")
+superficie_entry.configure(state="disabled")
+mois_entry.configure(state="disabled")
+jour_entry.configure(state="disabled")
+annee_entry.configure(state="disabled")
+president_entry.configure(state="disabled")
+pib_entry.configure(state="disabled")
 refresh_btn=Button(entry_wrapper,text="Rafraichir",width=20,pady=5,padx=5,activebackground="black",activeforeground="white",background=widget_bg,font=main_font,fg=main_fg)
 refresh_btn.grid(row=6,column=0,columnspan=2,padx=5,pady=5)
 
-valider_btn=Button(entry_wrapper,text="valider",width=20,pady=5,padx=5,activebackground="black",activeforeground="white",background=widget_bg,font=main_font,fg=main_fg, command=add_country)
+valider_btn=Button(entry_wrapper,text="valider",width=20,pady=5,padx=5,activebackground="black",activeforeground="white",background=widget_bg,font=main_font,fg=main_fg, command=modifier_country)
 valider_btn.grid(row=6,column=3,columnspan=2,padx=5,pady=5)
+valider_btn.configure(state="disabled")
+refresh_btn.configure(state="disabled")
 
 
 retour_btn = Button(button_wrapper, text="retour",
@@ -228,7 +304,7 @@ retour_btn.pack(side=tk.LEFT,pady=10)
 liste_btn.pack(side=tk.RIGHT,pady=10,padx=5)
 
 
-info_label = Label(info_wrapper, text="Remplir les informations pour commencer", padx=5,font=header_font)
+info_label = Label(info_wrapper, text="Rechercher le pays a modifier pour commencer ", padx=5,font=header_font)
 info_label.pack()
 
 #init Wrapper
@@ -236,12 +312,5 @@ entry_wrapper.pack(fill="both", expand="no", padx=20,pady=20)
 button_wrapper.pack(fill="both", expand="no", padx=20,pady=20)
 info_wrapper.pack(fill="both", expand="no", padx=20,pady=20)
 
-
-#grid System
-
-#conditions
-
-#Data init
-#mainloop
 menu.mainloop()
 
