@@ -1,0 +1,22 @@
+{
+     "987": {
+          "nom": "Senegal",
+          "capital": "Dakar",
+          "population": 789456123,
+          "langue": "Wolof",
+          "superficie": "3214",
+          "independance": "15-05-1960",
+          "president": "Macky Sall",
+          "pib": 6985
+     },
+     "999": {
+          "nom": "Senegal",
+          "capital": "Dakar",
+          "population": 789456123,
+          "langue": "Afrikaan",
+          "superficie": 3214,
+          "independance": "15-5-1960",
+          "president": "Macky Sall",
+          "pib": 6985
+     }
+}
